@@ -1,0 +1,25 @@
+.box {
+    border-radius: 1.5rem;
+    height: 2rem;
+    width: 15%;
+    /* object-fit: cover; */
+}
+
+.box .flex {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin: 2rem 10rem;
+
+}
+
+.box .flex h3 {
+    font-size: 2rem;
+    color: var(--color-white);
+    text-transform: capitalize;
+    text-align: center;
+    /* background-color: green; */
+
+}
