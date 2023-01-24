@@ -8,14 +8,14 @@ require('dotenv').config()
 const PORT = process.env.PORT
 
 //database connection
-const MONGO_URI = process
+const MONGO_URI = process.env.MONGO_URI
 
 
 
 
 module.exports = {
     connectToDb: (cb) => {
-        mongoose.connect('mongodb://localhost:27017/main_project')
+        mongoose.connect(MONGO_URI)
             .then(() => {
                 console.log("connected to db");
                 return cb()

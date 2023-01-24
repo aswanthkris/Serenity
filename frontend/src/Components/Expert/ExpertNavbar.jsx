@@ -1,34 +1,21 @@
-import React, { useState } from "react";
+import React, { useState } from 'react'
 import { Transition } from "@headlessui/react";
-import { useNavigate, Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { clearUser } from '../../redux/loginSlice'
+import { Link, useNavigate } from "react-router-dom";
 
 
+function ExpertNavbar() {
 
-function Nav() {
-    const dispatch = useDispatch()
     const navigate = useNavigate()
     const [isOpen, setIsOpen] = useState(false);
-
     // console.log("local", localStorage.token);
-
-
     const handleLogout = () => {
-        console.log("in logout")
-        dispatch(clearUser())
-        localStorage.removeItem('token')
-        navigate('/')
+        localStorage.removeItem('expertToken')
+        navigate('/expert-login')
 
     }
-
     const handleLogin = () => {
-        // console.log("in loginnnn");
-        navigate('/user-login')
-        //     console.log("out loginn");
-
+        navigate('/expert-login')
     }
-    // 
     return (
         <div className="w-full">
             <nav className="bg-white">
@@ -44,48 +31,48 @@ function Nav() {
 
                             </div>
                             <div>
-                                <Link to="/" className="text-gray-900 text-xl font-bold text-emerald-600 " >Serenity</Link>
+                                <a className="text-gray-900 text-xl font-bold text-emerald-600 " href="/expert-dashboard">Serenity</a>
 
                             </div>
                             <div className="hidden md:block">
                                 <div className="ml-10 flex items-baseline space-x-4">
                                     <Link
-                                        href="#"
+
+                                        to="/expert-dashboard"
                                         className="text-gray-900 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                                     >
-                                        How ?
+                                        Dashboard
                                     </Link>
 
                                     <Link
-                                        to="/user-experts"
+                                        to="/expert-profile"
                                         className="text-gray-900 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                                     >
-                                        Experts to help you
+                                        Profile
                                     </Link>
 
                                     <Link
-                                        to="/user-plans"
+                                        to="#"
                                         className="text-gray-900 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                                     >
-                                        Plans
+                                        Sessions
                                     </Link>
                                     <Link
                                         to="#"
                                         className="text-gray-900 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                                     >
-                                        Serenity Hub
+                                        Chats
                                     </Link>
 
                                     <div className="absolute top-5 right-8">
-                                        {localStorage.token ? <a
+                                        {localStorage.expertToken ? <a
 
                                             onClick={handleLogout}
                                             className="text-gray-900  hover:bg-gray-700 cursor-pointer hover:text-white mx-auto px-3 py-2 rounded-md text-sm font-medium "
                                         >
                                             Log out
                                         </a> : <a
-                                            // to='/user-login'
-                                            // href="/user-login"
+
                                             onClick={handleLogin}
                                             className="text-gray-900  hover:bg-gray-700 cursor-pointer hover:text-white mx-auto px-3 py-2 rounded-md text-sm font-medium "
                                         >
@@ -154,48 +141,48 @@ function Nav() {
                     {(ref) => (
                         <div className="md:hidden" id="mobile-menu">
                             <div ref={ref} className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                                <Link
-                                    to="#"
+                                <a
+                                    href="/expert-dashboard"
                                     className="hover:bg-gray-700 text-white block px-3 py-2 rounded-md text-base font-medium"
                                 >
                                     Serenity
-                                </Link>
+                                </a>
 
-                                <Link
-                                    to="#"
+                                <a
+                                    href="/expert-dashboard"
                                     className="text-gray-900 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
                                 >
-                                    How ?
-                                </Link>
+                                    Dashboard
+                                </a>
 
-                                <Link
-                                    to="/user-experts"
+                                <a
+                                    href="/expert-profile"
                                     className="text-gray-900 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
                                 >
-                                    Experts to help you
-                                </Link>
+                                    Profile
+                                </a>
 
-                                <Link
-                                    to="/user-plans"
+                                <a
+                                    href="#"
                                     className="text-gray-900 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
                                 >
-                                    Plans
-                                </Link>
+                                    Sessions
+                                </a>
 
-                                <Link
-                                    to="#"
+                                <a
+                                    href="#"
                                     className="text-gray-900 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
                                 >
-                                    Serenity Hub
-                                </Link>
-                                {localStorage.token ? <a
+                                    Chats
+                                </a>
+                                {localStorage.expertToken ? <a
 
                                     onClick={handleLogout}
                                     className="text-gray-900  hover:bg-gray-700 hover:text-white mx-auto px-3 py-2 rounded-md text-sm font-medium "
                                 >
                                     Log out
                                 </a> : <a
-                                    // to = '/user-login'
+
                                     onClick={handleLogin}
                                     className="text-gray-900  hover:bg-gray-700 hover:text-white mx-auto px-3 py-2 rounded-md text-sm font-medium "
                                 >
@@ -208,21 +195,21 @@ function Nav() {
             </nav >
 
             {/* <header className="bg-white shadow">
-                <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-                </div>
-            </header> */}
+            <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
+            </div>
+        </header> */}
             {/* <main>
-                <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
 
-                    <div className="px-4 py-6 sm:px-0">
-                        <div className="border-4 border-dashed border-gray-200 rounded-lg h-96"></div>
-                    </div>
-
+                <div className="px-4 py-6 sm:px-0">
+                    <div className="border-4 border-dashed border-gray-200 rounded-lg h-96"></div>
                 </div>
-            </main> */}
+
+            </div>
+        </main> */}
         </div >
-    );
+    )
 }
 
-export default Nav;
+export default ExpertNavbar

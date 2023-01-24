@@ -1,6 +1,62 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { Formik, useFormik } from 'formik'
+import { expertSignupSchema } from '../../Schemas/ExpertSignupSchema'
+import { useNavigate } from 'react-router-dom'
+
+
+
+const initialValues = {
+    name: '',
+    email: '',
+    password: '',
+    confirm_password: '',
+    gender: '',
+    qualification: '',
+    specialization: ''
+}
 
 function ExpertSignup() {
+    const navigate = useNavigate()
+    const [error, setError] = useState(null)
+
+
+    const submitHandler = () => {
+
+    }
+
+
+    const { values, errors, handleChange, touched, handleBlur, handleSubmit } = useFormik({
+        initialValues,
+        validationSchema: expertSignupSchema,
+        onSubmit: async (value, action) => {
+            const response = await fetch('http://localhost:5050/expert/signup', {
+                method: 'POST',
+                body: JSON.stringify(value),
+                headers: {
+                    'Content-Type': "application/json"
+                }
+            })
+            console.log("raw response ", response);
+            const json = await response.json()
+            if (!response.ok) {
+                setError(json.error)
+                console.log(error);
+            }
+            if (response.ok) {
+                if (json.data === 'Existing user') {
+                    setError(json.status)
+                    console.log("user exist:", json.status)
+                }
+                setError(null)
+                navigate('/expert-login')
+                console.log("new user added", json)
+            }
+            // console.log("on submit values:", value);
+            action.resetForm()
+        }
+    })
+
+
     return (
         <div>
 
@@ -41,38 +97,38 @@ function ExpertSignup() {
                         {/* <p className="text-gray-100">
                         or use email your account
                     </p> */}
-                        <form className="sm:w-2/3 w-full px-4 lg:px-0 mx-auto">
+                        <form onSubmit={handleSubmit} className="sm:w-2/3 w-full px-4 lg:px-0 mx-auto">
                             <div className="pb-2 pt-4">
                                 <input type="text" name="name"
                                     id="name"
                                     placeholder="Name"
-                                    // value={values.name}
-                                    // onChange={handleChange}
-                                    // onBlur={handleBlur}
-                                    className="block w-full p-4 text-black rounded-sm bg-white border-3" />
-                                {/* {errors.name && touched.name ? < p className='text-orange-600'>{errors.name}</p> : null} */}
+                                    value={values.name}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    className="block w-full p-4 text-black rounded-sm bg-white border-2" />
+                                {errors.name && touched.name ? < p className='text-orange-600'>{errors.name}</p> : null}
                             </div>
                             <div className="pb-2 pt-4">
                                 <input type="email"
                                     name="email"
                                     id="email"
                                     placeholder="Email"
-                                    // value={values.email}
-                                    // onChange={handleChange}
-                                    // onBlur={handleBlur}
+                                    value={values.email}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
                                     className="block w-full p-4 text-black rounded-sm bg-white border-2" />
-                                {/* {errors.email && touched.email ? < p className='text-orange-600'>{errors.email}</p> : null} */}
+                                {errors.email && touched.email ? < p className='text-orange-600'>{errors.email}</p> : null}
                             </div>
                             <div className="pb-2 pt-4">
                                 <input type="password"
                                     name="password"
                                     id="password"
                                     placeholder="Password"
-                                    // value={values.password}
-                                    // onChange={handleChange}
-                                    // onBlur={handleBlur}
+                                    value={values.password}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
                                     className="block w-full p-4 text-black rounded-sm bg-white border-2" />
-                                {/* {errors.password && touched.password ? < p className='text-orange-600'>{errors.password}</p> : null} */}
+                                {errors.password && touched.password ? < p className='text-orange-600'>{errors.password}</p> : null}
                             </div>
                             <div className="pb-2 pt-4">
                                 <input className="block w-full p-4 text-black rounded-sm bg-white border-2"
@@ -80,71 +136,70 @@ function ExpertSignup() {
                                     name="confirm_password"
                                     id="confirm_password"
                                     placeholder="Confirm Password"
-                                // value={values.confirm_password}
-                                // onChange={handleChange}
-                                // onBlur={handleBlur}
+                                    value={values.confirm_password}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
                                 />
-                                {/* {errors.confirm_password && touched.confirm_password ? <p className='text-orange-600'>{errors.confirm_password}</p> : null} */}
+                                {errors.confirm_password && touched.confirm_password ? <p className='text-orange-600'>{errors.confirm_password}</p> : null}
+                            </div>
+
+                            <div className="pb-2 pt-4">
+                                <select type="text" name="gender"
+                                    id="gender"
+                                    placeholder="Gender"
+                                    value={values.gender}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    className="block w-full p-4 text-black rounded-sm bg-white border-2" >
+                                    <option  >Gender</option>
+
+                                    <option value='Woman'>Woman</option>
+                                    <option value='Man'>Man</option>
+                                    <option value='Transgender'>Transgender</option>
+                                    <option value='Non-binary/non-conforming'>Non-binary/non-conforming</option>
+                                    <option value='Prefer not to respond'>Prefer not to respond</option>
+
+
+                                </select>
+                                {errors.name && touched.name ? < p className='text-orange-600'>{errors.name}</p> : null}
                             </div>
                             <div className="pb-2 pt-4">
-                                <input
-                                    type="text"
-                                    onFocus={this.type = 'Date'}
-                                    name="dob"
-                                    id="dob"
-                                    placeholder="Date of birth"
-                                    // value={values.password}
-                                    // onChange={handleChange}
-                                    // onBlur={handleBlur}
-                                    className="block w-full p-4 text-black rounded-sm bg-white border-2" />
-                                {/* {errors.password && touched.password ? < p className='text-orange-600'>{errors.password}</p> : null} */}
+                                <select type="text" name="qualification"
+                                    id="qualification"
+                                    placeholder="Qualification"
+                                    value={values.qualification}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    className="block w-full p-4 text-black rounded-sm bg-white border-2" >
+                                    <option >Qualification</option>
+
+                                    <option value='MBBS'>MBBS</option>
+                                    <option value='MA Psychology'>MA Psychology</option>
+                                    <option value='MA IN CLINICAL PSYCHOLOGY'>MA In Clinical Psychology</option>
+                                </select>
+                                {/* {errors.name && touched.name ? < p className='text-orange-600'>{errors.name}</p> : null} */}
                             </div>
                             <div className="pb-2 pt-4">
-                                <input type="text" name="name"
-                                    id="name"
-                                    placeholder="Name"
-                                    // value={values.name}
-                                    // onChange={handleChange}
-                                    // onBlur={handleBlur}
-                                    className="block w-full p-4 text-black rounded-sm bg-white border-2" />
-                                {/* {errors.name && touched.name ? < p className='text-orange-600'>{errors.name}</p> : null} */}
-                            </div><div className="pb-2 pt-4">
-                                <input type="text" name="name"
-                                    id="name"
-                                    placeholder="Name"
-                                    // value={values.name}
-                                    // onChange={handleChange}
-                                    // onBlur={handleBlur}
-                                    className="block w-full p-4 text-black rounded-sm bg-white border-2" />
-                                {/* {errors.name && touched.name ? < p className='text-orange-600'>{errors.name}</p> : null} */}
-                            </div><div className="pb-2 pt-4">
-                                <input type="text" name="name"
-                                    id="name"
-                                    placeholder="Name"
-                                    // value={values.name}
-                                    // onChange={handleChange}
-                                    // onBlur={handleBlur}
-                                    className="block w-full p-4 text-black rounded-sm bg-white border-2" />
-                                {/* {errors.name && touched.name ? < p className='text-orange-600'>{errors.name}</p> : null} */}
-                            </div><div className="pb-2 pt-4">
-                                <input type="text" name="name"
-                                    id="name"
-                                    placeholder="Name"
-                                    // value={values.name}
-                                    // onChange={handleChange}
-                                    // onBlur={handleBlur}
-                                    className="block w-full p-4 text-black rounded-sm bg-white border-2" />
-                                {/* {errors.name && touched.name ? < p className='text-orange-600'>{errors.name}</p> : null} */}
-                            </div><div className="pb-2 pt-4">
-                                <input type="text" name="name"
-                                    id="name"
-                                    placeholder="Name"
-                                    // value={values.name}
-                                    // onChange={handleChange}
-                                    // onBlur={handleBlur}
-                                    className="block w-full p-4 text-black rounded-sm bg-white border-2" />
+                                <select type="text" name="specialization"
+                                    id="specialization"
+                                    placeholder="specialization"
+                                    value={values.specialization}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    className="block w-full p-4 text-black rounded-sm bg-white border-2" >
+                                    <option >Specialization</option>
+
+                                    <option value='Family Therapy'>Family Therapy</option>
+                                    <option value='Depression'>Depression</option>
+                                    <option value='Psycho-Somatic Disorders'>Psycho-Somatic Disorders</option>
+                                    <option value='Anxiety'>Anxiety</option>
+                                    <option value='suicidal ideation'>suicidal ideation</option>
+                                    <option value='couple counselling'>couple counselling</option>
+
+                                </select>
                                 {/* {errors.name && touched.name ? < p className='text-orange-600'>{errors.name}</p> : null} */}
                             </div>
+
                             {/* <div className="text-right text-gray-400 hover:underline hover:text-gray-100">
                             <a href="#">Forgot your password?</a>
                         </div> */}
@@ -152,7 +207,7 @@ function ExpertSignup() {
                                 <button className="uppercase block w-full p-4 text-lg rounded-full bg-green-400 hover:bg-green-600 focus:outline-none" type='submit'>sign up</button>
                             </div>
                             <div className='text-right text-gray-600 hover: hover:text-gray-900'>
-                                <a href="/user-login">Already a member? <span className='text-green-600 '>Login here.</span></a>
+                                <a href="/expert-login">Already a member? <span className='text-green-600 '>Login here.</span></a>
                             </div>
 
                             {/* <div className="p-4 text-center right-0 left-0 flex justify-center space-x-4 mt-16 lg:hidden ">
@@ -170,7 +225,7 @@ function ExpertSignup() {
                     </div>
                 </div >
             </section >
-        </div>
+        </div >
     )
 }
 

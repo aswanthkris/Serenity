@@ -5,9 +5,10 @@ import UserHome from '../../Components/User/UserHome'
 import UserNavbar from '../../Components/User/UserNavbar'
 import Footer from '../../Components/User/Footer'
 
+
 function HomePage() {
     return (
-        <div>
+        <div >
             < UserNavbar />
             <UserHome />
             <Footer />

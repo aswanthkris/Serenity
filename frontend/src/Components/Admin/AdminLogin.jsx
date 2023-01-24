@@ -25,9 +25,9 @@ function AdminLogin() {
             })
                 .then((res) => res.json())
                 .then((data) => {
-                    console.log(data);
+                    console.log("data is : ", data);
                     if (data.loggedIn) {
-                        localStorage.setItem('token-admin', data.token)
+                        localStorage.setItem('adminToken', data.adminToken)
                         navigate('/admin-dashboard')
                     } else if (data.passErr) {
                         setValidation(data.message)
@@ -46,7 +46,7 @@ function AdminLogin() {
     return (
         <section className="min-h-screen flex items-stretch text-white ">
             <div className="lg:flex w-1/2 hidden bg-gray-500 bg-no-repeat bg-cover relative items-center" >
-                <div className="absolute bg-green-500 opacity-60 inset-0 z-0"></div>
+                <div className="absolute bg- opacity-60 inset-0 z-0"></div>
                 <div className="w-full px-24 z-10">
                     <h1 className="text-5xl font-bold text-left font-sans tracking-wide">Serenity</h1>
                     <p className="text-3xl my-4">Admin Login </p>
@@ -81,7 +81,7 @@ function AdminLogin() {
                                 value={values.name}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
-                                className="block w-full p-4 text-lg rounded-sm bg-black border-2" />
+                                className="block w-full p-4 text-lg rounded-sm bg-white border-2" />
                             {validation ? < p className='text-orange-600'>{validation}</p> : null}
                         </div>
                         <div className="pb-2 pt-4">
@@ -92,14 +92,14 @@ function AdminLogin() {
                                 value={values.password}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
-                                className="block w-full p-4 text-lg rounded-sm bg-black border-2" />
+                                className="block text-black w-full p-4 text-lg rounded-sm bg-white border-2" />
                             {/* {errors.password && touched.password ? < p className='text-orange-600'>{errors.password}</p> : null} */}
                         </div>
                         <div className="text-right text-gray-400 hover:underline hover:text-gray-100">
                             <a href="#">Forgot your password?</a>
                         </div>
                         <div className="px-4 pb-2 pt-4">
-                            <button className="uppercase block w-full p-4 text-lg rounded-full bg-green-400 hover:bg-green-600 focus:outline-none" type='submit'>Log in</button>
+                            <button className="uppercase block w-full p-4 text-lg rounded-full bg-gray-700 hover:bg-gray-900 focus:outline-none" type='submit'>Log in</button>
                         </div>
                         <div className='text-right text-gray-600 hover: hover:text-gray-900'>
                             <a href="/user-signup">New to Serenity? <span className='text-green-600 '>join here.</span></a>

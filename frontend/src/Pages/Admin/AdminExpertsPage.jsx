@@ -1,13 +1,14 @@
 import React from 'react'
-import AdminDashboard from '../../Components/Admin/AdminDashboard'
+import AdminExperts from '../../Components/Admin/AdminExperts'
 import AdminNavbar from '../../Components/Admin/AdminNavbar'
-function AdminDashboardPage() {
+
+function AdminExpertsPage() {
     return (
         <div>
             <AdminNavbar />
-            <AdminDashboard />
+            <AdminExperts />
         </div>
     )
 }
 
-export default AdminDashboardPage
+export default AdminExpertsPage

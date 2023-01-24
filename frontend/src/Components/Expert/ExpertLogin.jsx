@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { useFormik } from 'formik'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
-import { axiosUserInstance } from '../../Instance/Axios'
+
+import { axiosExpertInstance } from '../../Instance/Axios'
 import { useDispatch } from 'react-redux'
 import { user } from '../../redux/loginSlice'
 
@@ -12,46 +12,47 @@ const initialValues = {
 }
 
 
-function UserLogin() {
+function ExpertLogin() {
     const dispatch = useDispatch()
 
     const [validation, setValidation] = useState('')
-
+    console.log("validation is ", validation);
     let navigate = useNavigate();
 
     const { values, errors, handleChange, handleBlur, handleSubmit, touched } = useFormik({
         initialValues,
         onSubmit: async (value, action) => {
-            console.log("userinfo", value);
-            // try {
-            const response = await axiosUserInstance.post('/login', {
-                value
+            console.log("expertinfo", value);
+            try {
+                const response = await axiosExpertInstance.post('/login', {
+                    value
+                })
+                const data = response.data
+                console.log("user id : ", data.status);
+                // .then((data) => {
+                if (data.data === "Password Incorrect") {
+                    console.log("Cannot login : ", data.status);
+                    setValidation(data.status)
+                } else if (data.data === "Invalid Expert") {
+                    console.log("Cannot login : ", data.status);
+                    setValidation(data.status)
+                } else if (data.data === "Logged in") {
 
-            })
+                    navigate('/expert-dashboard')
+                    // dispatch(user(data.expert))
+                    const userLocal = localStorage.setItem('expert', data.expert.email)
+                    const tokenLocal = localStorage.setItem('expertToken', data.token)
+                    console.log("token data : ", userLocal, tokenLocal)
 
-            // } catch(error) {
-            //     console.log(error.message);
-            // }
+                }
+
+
+            } catch (error) {
+                console.log(error.message);
+            }
             // .then((res) => res.json())
             // console.log("response login", response.data);
-            const data = response.data
-            // console.log("user id : ", data.user);
-            // .then((data) => {
-            if (data.data === "Password Incorrect") {
-                console.log("Cannot login : ", data.status);
-                setValidation(data.status)
-            } else if (data.data === "Invalid User") {
-                console.log("Cannot login : ", data.status);
-                setValidation(data.status)
-            } else if (data.data === "Logged in") {
 
-                navigate('/')
-                dispatch(user(data.user))
-                const userLocal = localStorage.setItem('user', data.user._id)
-                const tokenLocal = localStorage.setItem('token', data.token)
-                console.log("token data : ", userLocal, tokenLocal);
-
-            }
             // })
             action.resetForm();
         }
@@ -65,7 +66,7 @@ function UserLogin() {
                 <div className="absolute bg-green-500 opacity-60 inset-0 z-0"></div>
                 <div className="w-full px-24 z-10">
                     <h1 className="text-5xl font-bold text-left font-sans tracking-wide">Serenity</h1>
-                    <p className="text-3xl my-4">Your happy place... </p>
+                    <p className="text-3xl my-4">Experts Login </p>
                 </div>
 
             </div>
@@ -118,7 +119,7 @@ function UserLogin() {
                             <button className="uppercase block w-full p-4 text-lg rounded-full bg-green-400 hover:bg-green-600 focus:outline-none" type='submit'>Log in</button>
                         </div>
                         <div className='text-right text-gray-600 hover: hover:text-gray-900'>
-                            <a href="/user-signup">New to Serenity? <span className='text-green-600 '>join here.</span></a>
+                            <a href="/expert-signup">New to Serenity? <span className='text-green-600 '>join here.</span></a>
                         </div>
 
 
@@ -130,4 +131,4 @@ function UserLogin() {
     )
 }
 
-export default UserLogin
+export default ExpertLogin

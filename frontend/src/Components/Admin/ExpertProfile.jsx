@@ -1,19 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { axiosUserInstance } from '../../Instance/Axios'
-import { experts } from '../../redux/expertSlice'
-
-
-
 function ExpertProfile() {
-
-
     const navigate = useNavigate()
+
     const [expert, setExpert] = useState([])
     const [showMore, setShowMore] = useState(false);
     const location = useLocation()
-    const dispatch = useDispatch()
     // console.log("location id", location.state)
     const expertId = location.state
     useEffect(() => {
@@ -22,18 +15,15 @@ function ExpertProfile() {
             const expert = await axiosUserInstance.post("/expert-profile", { id: expertId })
             const expertDetails = expert.data.expert
             setExpert(expertDetails)
-            console.log("frontend", expertDetails);
+            // console.log("frontend", expertDetails);
 
 
         }
         fetchExperts()
 
     }, [])
-    const bookingHandler = (expertDetails) => {
-        console.log("inside booking handler");
-        navigate('/user-plans', expertDetails)
-        dispatch(experts(expertDetails))
-
+    const downloadHandler = () => {
+        navigate('#')
     }
 
     console.log("state", expert);
@@ -70,13 +60,13 @@ function ExpertProfile() {
                                     </div>
                                     <div className="w-full lg:w-4/12 px-4 lg:order-3 lg:text-right lg:self-center">
                                         <div className="py-6 px-3 mt-32 sm:mt-0">
-                                            <button onClick={() => bookingHandler(expert)} className="bg-emerald-600 active:bg-pink-600 uppercase text-white font-bold hover:bg-emerald-900 text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150" type="button">
-                                                Book now
+                                            <button onClick={downloadHandler} className="bg-emerald-600 active:bg-pink-600 uppercase text-white font-bold hover:bg-emerald-900 text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150" type="button">
+                                                Download Certificate
                                             </button>
                                         </div>
                                     </div>
                                     <div className="w-full lg:w-4/12 px-4 lg:order-1">
-                                        <div className="flex justify-center py-4 lg:pt-4 pt-8">
+                                        {/* <div className="flex justify-center py-4 lg:pt-4 pt-8">
                                             <div className="mr-4 p-3 text-center">
                                                 <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">22</span><span className="text-sm text-blueGray-400">Sessions</span>
                                             </div>
@@ -86,7 +76,7 @@ function ExpertProfile() {
                                             <div className="lg:mr-4 p-3 text-center">
                                                 <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">89</span><span className="text-sm text-blueGray-400">Comments</span>
                                             </div>
-                                        </div>
+                                        </div> */}
                                     </div>
                                 </div>
                                 <div className="text-center mt-12">

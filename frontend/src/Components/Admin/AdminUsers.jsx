@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -10,6 +10,8 @@ import Paper from "@material-ui/core/Paper";
 import IconButton from "@material-ui/core/IconButton";
 import CheckIcon from "@material-ui/icons/Check";
 import BlockIcon from "@material-ui/icons/Block";
+import { useEffect } from "react";
+import { axiosAdminInstance } from "../../Instance/Axios";
 
 const useStyles = makeStyles({
     table: {
@@ -18,23 +20,54 @@ const useStyles = makeStyles({
 });
 
 function AdminUsers() {
+
+    const [users, setUsers] = useState([])
+    console.log("users in state are : ", users);
+    // const navigate = useNavigate()
+
+
+
+
+    const handleBlock = async (item) => {
+        const userId = item._id
+
+        console.log("block status is : ", users);
+        if (item.block) {
+
+            const unblock = await axiosAdminInstance.post('/unblock-user', { userId })
+            console.log("expert unblock respose : ", unblock)
+            getUsers()
+        } else {
+            const block = await axiosAdminInstance.post('/block-user', { userId })
+            console.log("expert block respose : ", block)
+            getUsers()
+
+        }
+    }
+
+
     const classes = useStyles();
 
-    const users = [
-        {
-            id: 1,
-            name: "John Doe",
-            email: "john@example.com",
-            blocked: false
-        },
-        {
-            id: 2,
-            name: "Jane Doe",
-            email: "jane@example.com",
-            blocked: true
-        },
-        // Add more users here
-    ];
+
+    const getUsers = async () => {
+
+        const response = await axiosAdminInstance.post('/get-users')
+        console.log("get users", response.data.data)
+        const expertsList = response.data.data
+        setUsers(expertsList)
+
+    }
+
+
+    try {
+        useEffect(() => {
+
+            getUsers()
+        }, [])
+
+    } catch (error) {
+        console.log(error);
+    }
 
     return (
         <TableContainer component={Paper} className="container mx-auto px-4 ">
@@ -46,7 +79,7 @@ function AdminUsers() {
                             Email
                         </TableCell>
                         <TableCell align="right" className="px-4 py-2">
-                            Status
+                            Block Status
                         </TableCell>
                     </TableRow>
                 </TableHead>
@@ -61,19 +94,17 @@ function AdminUsers() {
                             </TableCell>
                             <TableCell align="right" className="px-4 py-2">
                                 <IconButton
-                                    color={user.blocked ? "secondary" : "primary"}
-                                    onClick={() => {
-                                        // Implement block/unblock logic here
-                                    }}
+                                    color={user.block ? "secondary" : "primary"}
+                                    onClick={() => handleBlock(user)}
                                 >
-                                    {user.blocked ? <BlockIcon /> : <CheckIcon />}
+                                    {user.block ? <BlockIcon /> : <CheckIcon />}
                                 </IconButton>
                             </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
             </Table>
-        </TableContainer>
+        </TableContainer >
     );
 }
 

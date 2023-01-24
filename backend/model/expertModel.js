@@ -14,10 +14,6 @@ const expertSchema = new Schema({
         type: String,
         required: true
     },
-    dob: {
-        type: Date,
-        required: true
-    },
     gender: {
         type: String,
         required: true
@@ -28,7 +24,6 @@ const expertSchema = new Schema({
     },
     experience: {
         type: String,
-        required: true
     },
     language: {
         type: Array,
@@ -39,8 +34,7 @@ const expertSchema = new Schema({
         required: true
     },
     description: {
-        type: String,
-        required: true
+        type: String
     },
     block: {
         type: Boolean,
@@ -53,7 +47,10 @@ const expertSchema = new Schema({
     },
     availableDate: {
         type: Date
-    }
+    },
+    image: {
+        type: String
+    },
 
 
 }, { timestamps: true })

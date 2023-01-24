@@ -3,7 +3,7 @@ import UserNavbar from '../../Components/User/UserNavbar'
 import Payment from '../../Components/User/Payment'
 function PaymentPage() {
     return (
-        <div>
+        <div >
             < UserNavbar />
             <Payment />
         </div >

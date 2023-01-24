@@ -75,19 +75,20 @@ const loginUser = async (req, res) => {
                     email: userValidation
                 }, 'secret123')
                 let errMessage = "Logged in"
-                res.json({ token, data: errMessage })
+                res.json({ token, data: errMessage, user: userValidation })
                 console.log("user logged in");
             } else {
                 validation.passErr = true
                 let errMessage = "Password Incorrect"
-                res.json({ status: "Password Wrong", data: errMessage })
+                res.json({ status: "Wrong email or password", data: errMessage })
             }
         } else {
             validation.invalidUser = true
             let errMessage = "Invalid User"
-            res.json({ status: "No such user exists", data: errMessage })
+            res.json({ status: "Wrong email or password", data: errMessage })
         }
     } catch (error) {
+        console.log("inside catch");
         res.status(400).json({ error: error.message })
     }
 
@@ -121,7 +122,6 @@ const expertProfile = async (req, res) => {
     }
 }
 
-
 //filter experts
 
 const filterExpert = async (req, res) => {
@@ -130,7 +130,7 @@ const filterExpert = async (req, res) => {
     try {
         const expert = await ExpertList.find({
             "language": {
-                "$in": [`${filterDetails.language}`]
+                "$in": [`${filterDetails.languages}`]
             },
             "specialization": {
                 "$in": [`${filterDetails.specialization}`]
@@ -141,18 +141,28 @@ const filterExpert = async (req, res) => {
 
 
         })
-        // console.log("expert", expert);
+        console.log("expert", expert);
         res.json({ status: "filtered list", expert })
     } catch (error) {
         res.json({ error: error.message })
     }
 }
 
+//Payment success page
+
+const paymentSuccess = (req, res) => {
+    try {
+        const redirectUrl = req.body.succesurl;
+    } catch (err) {
+
+    }
+}
 
 module.exports = {
     createUser,
     loginUser,
     expertsList,
     expertProfile,
-    filterExpert
+    filterExpert,
+    paymentSuccess
 }       

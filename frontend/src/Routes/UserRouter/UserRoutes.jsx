@@ -9,56 +9,43 @@ import ExpertsPage from '../../Pages/User/ExpertsPage'
 import ExpertProfilePage from '../../Pages/User/ExpertProfilePage'
 import PlansPage from '../../Pages/User/PlansPage'
 import PaymentPage from '../../Pages/User/PaymentPage'
+import CheckoutSuccessPage from '../../Pages/User/CheckoutSuccessPage'
+import UserDashboardPage from '../../Pages/User/UserDashboardPage'
+import ProtectRoute from '../../Routes/UserRouter/ProtectRoute'
 
 function UserRoutes() {
     return (
         <>
             <BrowserRouter >
+                <Routes>
+                    <Route path='/user-signup'
+                        element={<SignupPage />} />
 
+                    <Route path='/user-login'
+                        element={<LoginPage />} />
 
-                <div className='user-signup'>
-                    <Routes>
-                        <Route path='/user-signup'
-                            element={<SignupPage />} />
-                    </Routes>
-                </div>
-                <div className='user-login'>
-                    <Routes>
-                        <Route path='/user-login'
-                            element={<LoginPage />} />
-                    </Routes>
-                </div>
-                <div className='user-home'>
-                    <Routes>
-                        <Route path='/'
-                            element={< HomePage />} />
-                    </Routes>
-                </div>
-                <div className='user-experts'>
-                    <Routes>
-                        <Route path='/user-experts'
-                            element={<ExpertsPage />} />
-                    </Routes>
-                </div>
-                <div className='user-expert-profile'>
-                    <Routes>
-                        <Route path='/user-experts-profile'
-                            element={<ExpertProfilePage />} />
-                    </Routes>
-                </div>
-                <div className='user-expert-profile'>
-                    <Routes>
-                        <Route path='/user-plans'
-                            element={<PlansPage />} />
-                    </Routes>
-                </div>
-                <div className='user-payment'>
-                    <Routes>
+                    <Route path='/'
+                        element={< HomePage />} />
+
+                    <Route path='/user-experts'
+                        element={<ExpertsPage />} />
+
+                    <Route path='/user-experts-profile'
+                        element={<ExpertProfilePage />} />
+
+                    <Route path='/user-plans'
+                        element={<PlansPage />} />
+                    <Route element={<ProtectRoute />}>
                         <Route path='/user-payment'
                             element={<PaymentPage />} />
-                    </Routes>
-                </div>
 
+                        <Route path='/checkout-success'
+                            element={<CheckoutSuccessPage />} />
+
+                        <Route path='/user-dashboard'
+                            element={<UserDashboardPage />} />
+                    </Route>
+                </Routes>
             </BrowserRouter>
 
         </>

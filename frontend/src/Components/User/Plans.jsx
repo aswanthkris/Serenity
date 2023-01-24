@@ -3,14 +3,23 @@ import { useNavigate } from 'react-router-dom';
 
 
 
+
 const plans = [{ name: "Explore", sessions: 1, price: 399, image: "https://images.pexels.com/photos/789822/pexels-photo-789822.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1", description: "Vent out, discuss your issues & create a plan with your talk therapist" },
 { name: "Initial Step", sessions: 3, price: 999, image: 'https://images.pexels.com/photos/1236678/pexels-photo-1236678.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', description: "Identify thought patterns, break negative thought loops & initiate positive ones" },
 { name: "Know your mind", sessions: 9, price: 1799, image: 'https://images.pexels.com/photos/774866/pexels-photo-774866.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', description: "Initiate behavioural changes, learn how to manage your thoughts & emotions" }]
 export default function Plans() {
     const navigate = useNavigate()
-    const buyHandler = () => {
-        navigate('/user-payment')
+    const token = localStorage.getItem('token')
+    const buyHandler = (plan) => {
+        // console.log("buy button worked");
+        {
+            // console.log("price is: ", price);
+            navigate('/user-payment', { state: plan })
+        }
+
+
     }
+
     return (
         <div>
             <div className='font-bold text-3xl mt-6  text-center'>Find A Plan That's Right For You </div>
@@ -19,7 +28,7 @@ export default function Plans() {
 
                 {
                     plans.map((item) => {
-                        console.log(item)
+                        // console.log(item)
                         return (
 
 
@@ -33,7 +42,7 @@ export default function Plans() {
                                     <p className='mt-4 mb-4 font-semibold'>{item.description}</p>
                                     <p className="font-bold text-2xl mt-2 mb-2">&#8377; {item.price} </p>
                                     <div className="card-actions">
-                                        <button onClick={buyHandler} className="bg-green-400 mb-10  hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Buy Now</button>
+                                        <button onClick={() => buyHandler(item)} className="bg-green-400 mb-10  hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Buy Now</button>
                                     </div>
                                 </div>
                             </div>

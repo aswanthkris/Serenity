@@ -2,14 +2,44 @@
 import React from "react";
 import expertImg from '../../assets/expert.jpg'
 import userImg from '../../assets/user.jpeg'
+import { useLocation } from "react-router-dom";
+import { axiosUserInstance } from "../../Instance/Axios";
+import { useSelector } from "react-redux";
 
 
-
-const user = { userName: "Aswanth Krishna", image: userImg }
-const expert = { expertName: "Dr. Akhil", image: expertImg }
+// const user = { userName: "Aswanth Krishna", image: userImg }
+// const expert = { expertName: "Dr. Akhil", image: expertImg }
+// const localUser = localStorage.getItem('user')
+// console.log("local storage user is: ", localUser);
 const Payment = () => {
+
+    const users = useSelector((state) => state.login.userList)
+    const expert = useSelector((state) => state.experts.experts)
+    const user = users._id
+    console.log("user from storee :", users);
+    const location = useLocation()
+    const plans = location.state
+    // console.log("plan data is : ", plans);
+    const tax = plans.price * 0.18
+    const total = plans.price + tax
+    // console.log("taxxx", tax);
+    // console.log("plan price is: ", location.state);
     const d = new Date();
     let text = d.toLocaleString();
+
+    const handleCheckout = async () => {
+        const response = await axiosUserInstance.post('create-checkout-session', {
+            plans,
+            total,
+            userId: user
+        })
+            .then((res) => {
+                if (res.data.url) {
+                    window.location.href = res.data.url
+                }
+            })
+            .catch((err) => console.log(err.message));
+    }
     return (
         <div className="py-14 px-4 md:px-6 2xl:px-20 2xl:container 2xl:mx-auto">
             <div className="flex justify-start item-start space-y-2 flex-col ">
@@ -28,7 +58,7 @@ const Payment = () => {
                             </div>
                             <div className="  flex justify-between items-start w-full flex-col md:flex-row space-y-4 md:space-y-0  ">
                                 <div className="w-full flex flex-col justify-start items-start space-y-8">
-                                    <h3 className="text-xl xl:text-2xl font-semibold leading-6 text-gray-200">Expert's Name </h3>
+                                    <h3 className="text-xl xl:text-2xl font-semibold leading-6 text-gray-200">{expert.name} </h3>
                                     <div className="flex justify-start items-start flex-col space-y-2">
                                         <p className="text-sm leading-none text-gray-200">
                                             <span className="text-gray-200">Date : </span>12/01/2023
@@ -57,13 +87,13 @@ const Payment = () => {
                             <div className="flex justify-center items-center w-full space-y-4 flex-col border-gray-200 border-b pb-4">
                                 <div className="flex justify-between  w-full">
                                     <p className="text-base leading-4 text-gray-800">Subtotal</p>
-                                    <p className="text-base leading-4 text-gray-600">&#8377;  999</p>
+                                    <p className="text-base leading-4 text-gray-600">&#8377;  {plans.price}</p>
                                 </div>
                                 <div className="flex justify-between items-center w-full">
                                     <p className="text-base leading-4 text-gray-800">
                                         GST<span className="bg-gray-200 p-1 text-xs font-medium leading-3  text-gray-800"></span>
                                     </p>
-                                    <p className="text-base leading-4 text-gray-600">&#8377;  179.82 (18%)</p>
+                                    <p className="text-base leading-4 text-gray-600">&#8377;  {tax} (18%)</p>
                                 </div>
                                 {/* <div className="flex justify-between items-center w-full">
                                     <p className="text-base leading-4 text-gray-800">Shipping</p>
@@ -72,7 +102,7 @@ const Payment = () => {
                             </div>
                             <div className="flex justify-between items-center w-full">
                                 <p className="text-base font-semibold leading-4 text-gray-800">Total</p>
-                                <p className="text-base font-semibold leading-4 text-gray-600">&#8377; 1178</p>
+                                <p className="text-base font-semibold leading-4 text-gray-600">&#8377; {total}</p>
                             </div>
                         </div>
                         <div className="flex flex-col justify-center px-4 py-6 md:p-6 xl:p-8 w-full bg-gray-50 space-y-6   ">
@@ -90,22 +120,22 @@ const Payment = () => {
                                         </p>
                                     </div>
                                 </div>
-                                <p className="text-lg font-semibold leading-6 text-gray-800">&#8377; 1178</p>
+                                <p className="text-lg font-semibold leading-6 text-gray-800">&#8377; {total}</p>
                             </div>
                             <div className="w-full flex justify-center items-center">
-                                <button className="hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-800 py-5 w-96 md:w-full bg-green-600 rounded text-base font-medium leading-4 text-white">Make Payment</button>
+                                <button onClick={() => handleCheckout()} className="hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-800 py-5 w-96 md:w-full bg-green-600 rounded text-base font-medium leading-4 text-white">Make Payment</button>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className="bg-gray-700 w-full xl:w-96 flex justify-between items-center md:items-start px-4 py-6 md:p-6 xl:p-8 flex-col ">
+                <div className="bg-gray-700 w-full h-28 xl:w-96 flex justify-between items-center md:items-start px-4 py-6 md:p-6 xl:p-8 flex-col ">
                     {/* <h3 className="text-xl font-semibold leading-5 text-gray-200">User :</h3> */}
                     <div className="flex  flex-col md:flex-row xl:flex-col justify-start items-stretch h-full w-full md:space-x-6 lg:space-x-8 xl:space-x-0 ">
                         <div className="flex flex-col justify-start items-start flex-shrink-0">
                             <div className="flex justify-center  w-full  md:justify-start items-center space-x-4 py-8 border-b border-gray-200">
-                                <img className="w-24 h-24 rounded-full" src={user.image} alt=" avatar" />
+                                {/* <img className="w-24 h-24 rounded-full" src={user.image} alt=" avatar" /> */}
                                 <div className=" flex justify-start items-start flex-col space-y-2">
-                                    <p className="text-base font-semibold leading-4 text-left text-gray-200">Hi, {user.userName}</p>
+                                    <p className="text-base font-semibold leading-4 text-left text-gray-200">Hi, {users.name}</p>
 
                                     {/* <p className="text-sm leading-5 text-gray-600">10 Previous Orders</p> */}
                                 </div>
@@ -140,7 +170,7 @@ const Payment = () => {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 
